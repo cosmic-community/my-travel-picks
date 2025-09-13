@@ -7,58 +7,65 @@ interface DestinationCardProps {
 export default function DestinationCard({ destination }: DestinationCardProps) {
   const { metadata } = destination;
   
-  if (!metadata) {
-    return null;
-  }
-
-  const cityName = metadata.city_name;
-  const country = metadata.country;
-  const description = metadata.short_description;
-  const travelPhoto = metadata.travel_photo;
-  const affiliateLink = metadata.affiliate_link;
-  const featured = metadata.featured;
-
   return (
-    <div className="destination-card animate-fade-up relative">
-      {featured && (
-        <div className="featured-badge">
-          ✨ Featured
-        </div>
-      )}
-      
-      {travelPhoto && (
-        <div className="overflow-hidden rounded-t-2xl">
-          <img
-            src={`${travelPhoto.imgix_url}?w=800&h=512&fit=crop&auto=format,compress`}
-            alt={`${cityName}, ${country}`}
-            width="400"
-            height="256"
-            className="destination-card-image"
-          />
-        </div>
-      )}
-      
-      <div className="p-6">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-          {cityName}
-        </h3>
+    <div className="destination-card group">
+      <div className="relative overflow-hidden rounded-xl mb-4">
+        {metadata.featured && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="featured-badge">
+              ⭐ Featured
+            </span>
+          </div>
+        )}
         
-        <p className="text-lg text-gray-600 mb-1">
-          {country}
+        <img
+          src={`${metadata.travel_photo.imgix_url}?w=800&h=600&fit=crop&auto=format,compress`}
+          alt={metadata.city_name}
+          width="800"
+          height="600"
+          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+      </div>
+      
+      <div className="space-y-3">
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-1">
+            {metadata.city_name}
+          </h3>
+          <p className="text-travel-ocean font-medium">
+            📍 {metadata.country}
+          </p>
+        </div>
+        
+        <p className="text-gray-600 line-clamp-3">
+          {metadata.short_description}
         </p>
         
-        <p className="text-gray-700 mb-6 leading-relaxed">
-          {description}
-        </p>
+        {metadata.tags && (
+          <div className="flex flex-wrap gap-2">
+            {metadata.tags.split(',').slice(0, 3).map((tag, index) => (
+              <span 
+                key={index} 
+                className="tag"
+              >
+                {tag.trim()}
+              </span>
+            ))}
+          </div>
+        )}
         
-        <a
-          href={affiliateLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="book-now-button inline-block text-center w-full"
-        >
-          Book Now
-        </a>
+        <div className="pt-4">
+          <a
+            href={metadata.affiliate_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta-button w-full"
+          >
+            Explore {metadata.city_name} ✈️
+          </a>
+        </div>
       </div>
     </div>
   );
